@@ -6,7 +6,7 @@
     <title>Bản Tin Môn Phái</title>
     
     <style>
-        /* CSS Tổng thể nền xám */
+        /* CSS Tổng thể nền xám giống Facebook */
         body {
             font-family: Arial, Helvetica, sans-serif;
             background-color: #f0f2f5;
@@ -22,10 +22,11 @@
             width: 100%;
             max-width: 600px;
             margin-bottom: 20px;
+            position: relative;
         }
         .search-container input {
             width: 100%;
-            padding: 12px 20px;
+            padding: 12px 20px 12px 40px; /* Thêm padding trái cho icon */
             border: 1px solid #ccc;
             border-radius: 20px;
             font-size: 15px;
@@ -36,7 +37,7 @@
         .search-container input:focus {
             border-color: #8b0000;
         }
-
+        
         /* Khung chứa bài viết */
         .post-container {
             background-color: #ffffff;
@@ -86,42 +87,127 @@
             color: #050505;
             line-height: 1.5;
         }
+        .hashtag {
+            color: #1877f2;
+            font-weight: 500;
+        }
 
-        /* Bố cục Ảnh */
+        /* Bố cục Ảnh (Grid) - Hỗ trợ Click */
         .post-images {
             display: grid;
-            grid-template-columns: 1fr 1fr;
             gap: 2px;
             margin-bottom: 2px;
         }
         .post-images img {
             width: 100%;
-            aspect-ratio: 1 / 1;
+            height: 100%;
             object-fit: cover;
+            cursor: pointer; /* Biến con trỏ thành bàn tay khi hover */
+            transition: opacity 0.2s;
+        }
+        .post-images img:hover {
+            opacity: 0.9; /* Hiệu ứng mờ nhẹ khi hover */
         }
 
-        /* Phần Video (Đã tối ưu cho cả ngang và dọc) */
+        /* Phần Video */
         .post-video {
             width: 100%;
-            background-color: #000; /* Nền đen lấp đầy khoảng trống cho video dọc */
+            background-color: #000;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         .post-video video {
             width: 100%;
-            max-height: 550px; /* Giới hạn chiều cao để video dọc không bị quá dài trên màn hình */
-            object-fit: contain; /* Cực kỳ quan trọng: Giữ nguyên tỷ lệ thật của video */
+            max-height: 550px;
+            object-fit: contain;
             display: block;
         }
         
-        /* Thông báo khi không tìm thấy bài viết */
+        /* CSS CHO LIGHTBOX GALLERY (POP-OUT) */
+        .lightbox {
+            display: none; /* Ẩn mặc định */
+            position: fixed;
+            z-index: 9999; /* Luôn nằm trên cùng */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9); /* Nền đen mờ 90% */
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            flex-direction: column;
+        }
+        
+        .lightbox.active {
+            display: flex; /* Hiện khi active */
+        }
+        
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+        
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            display: block;
+        }
+        
+        /* Các nút điều hướng */
+        .lightbox-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 3rem;
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 20px;
+            opacity: 0.6;
+            transition: opacity 0.3s, background-color 0.3s;
+            border-radius: 50%;
+        }
+        .lightbox-btn:hover {
+            opacity: 1;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .lightbox-prev { left: 10px; }
+        .lightbox-next { right: 10px; }
+        
+        /* Nút đóng */
+        .lightbox-close {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10000;
+        }
+        .lightbox-close:hover {
+            color: #ccc;
+        }
+
+        /* Thông báo khi không tìm thấy */
         #noResultMessage {
             display: none;
             color: #65676b;
             font-size: 15px;
             text-align: center;
             margin-top: 10px;
+        }
+        
+        /* Responsive CSS */
+        @media (max-width: 600px) {
+            .lightbox-btn { font-size: 2rem; padding: 10px; }
+            .lightbox-close { font-size: 2rem; }
         }
     </style>
 </head>
@@ -131,32 +217,11 @@
         <input type="text" id="searchInput" onkeyup="searchPosts()" placeholder="Tìm kiếm bài viết (ví dụ: tập huấn, thăng đai)...">
         <div id="noResultMessage">Không tìm thấy bài viết nào phù hợp.</div>
     </div>
-
-    <div class="post-container">
+<div class="post-container">
         <div class="post-header">
             <div class="post-info">
-                <h3>💖💖PQQ Truyền Thông</h3>
+                <h3>💖PQQ Truyền Thông💖</h3>
                 <span class="post-date">02/03/2026</span>
-            </div>
-        </div>
-        <div class="post-content">
-           VÕ ĐƯỜNG TRÍ VŨ THÀNH PHỐ HỒ CHÍ MINH KHU VỰC 3
-TỔ CHỨC KỲ THI THĂNG CẤP ĐẦU XUÂN
-        </div>
-        <div class="post-images">
-            <img src="anh1.jpg" alt="Hình ảnh tập huấn 1">
-            <img src="anh2.jpg" alt="Hình ảnh tập huấn 2">
-            <img src="anh3.jpg" alt="Hình ảnh tập huấn 3">
-            <img src="anh4.jpg" alt="Hình ảnh tập huấn 4">
-        </div>
-        
-    </div>
-
-    <div class="post-container">
-        <div class="post-header">
-            <div class="post-info">
-                <h3>💖💖PQQ Truyền Thông</h3>
-                <span class="post-date">28/02/2026</span>
             </div>
         </div>
         <div class="post-content">
@@ -167,15 +232,54 @@ TỔ CHỨC KỲ THI THĂNG CẤP ĐẦU XUÂN
             <span style="color: #1877f2; font-weight: 500;">#phatquangquyen</span> 
             <span style="color: #1877f2; font-weight: 500;">#vocotruyenvietnam</span>
         </div>
+        
         <div class="post-video">
             <video controls preload="metadata">
-                <source src="video2.mp4" type="video/mp4">
-                Trình duyệt của bạn không hỗ trợ thẻ video.
+                <source src="video1.mp4" type="video/mp4">
+                Trình duyệt không hỗ trợ thẻ video.
             </video>
         </div>
     </div>
+    <div class="post-container">
+        <div class="post-header">
+            <div class="post-info">
+                <h3>💖PQQ Truyền Thông💖</h3>
+                <span class="post-date">20/02/2026</span>
+            </div>
+        </div>
+        <div class="post-content">
+            Lịch thi thăng đai định kỳ quý I năm nay sẽ được tổ chức vào cuối tháng. Các câu lạc bộ vui lòng chốt danh sách võ sinh tham gia và gửi lại trước ngày 15 nhé. Chúc các võ sinh ôn luyện thật tốt!<br>
+            Dưới đây là video ôn tập và một số ảnh từ kỳ thi trước.
+        </div>
+        
+        <div class="post-video">
+            <video controls preload="metadata">
+                <source src="video2.mp4" type="video/mp4">
+                Trình duyệt không hỗ trợ thẻ video.
+            </video>
+        </div>
+
+        <div class="post-images" style="grid-template-columns: 1fr 1fr;">
+            <img src="anh1.jpg" alt="Thi thăng đai 1" class="gallery-image" data-post="post3" onclick="openLightbox(0, 'post3')">
+            <img src="anh2.jpg" alt="Thi thăng đai 2" class="gallery-image" data-post="post3" onclick="openLightbox(1, 'post3')">
+            <img src="anh3.jpg" alt="Thi thăng đai 3" class="gallery-image" data-post="post3" onclick="openLightbox(2, 'post3')">
+            <img src="anh4.jpg" alt="Thi thăng đai 4" class="gallery-image" data-post="post3" onclick="openLightbox(3, 'post3')">
+        </div>
+    </div>
+
+    
+
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <div class="lightbox-content">
+            <img class="lightbox-img" id="lightboxImg" src="" alt="Popup Image">
+        </div>
+        <button class="lightbox-btn lightbox-prev" onclick="prevImage()">&#10094;</button>
+        <button class="lightbox-btn lightbox-next" onclick="nextImage()">&#10095;</button>
+    </div>
 
     <script>
+        // 1. CHỨC NĂNG TÌM KIẾM
         function searchPosts() {
             let input = document.getElementById('searchInput');
             let filter = input.value.toLowerCase();
@@ -202,6 +306,93 @@ TỔ CHỨC KỲ THI THĂNG CẤP ĐẦU XUÂN
                 noResultMsg.style.display = "block";
             }
         }
+
+        // 2. CHỨC NĂNG LIGHTBOX GALLERY (POP-OUT)
+        let currentImageIndex = 0;
+        let currentPostImages = []; // Danh sách ảnh của post đang được xem
+        let currentPostId = ""; // ID của post đang được xem
+        let isLightboxOpen = false;
+
+        // Mở Lightbox
+        function openLightbox(index, postId) {
+            currentPostId = postId;
+            currentImageIndex = index;
+            // Thu thập tất cả các ảnh của post cụ thể bằng data-post
+            currentPostImages = document.querySelectorAll(`[data-post="${postId}"]`);
+            
+            updateLightboxContent();
+            document.getElementById('lightbox').classList.add('active');
+            isLightboxOpen = true;
+            
+            // Ngăn cuộn trang nền
+            document.body.style.overflow = 'hidden';
+            
+            // Thêm sự kiện bàn phím
+            document.addEventListener('keydown', handleKeydown);
+        }
+
+        // Đóng Lightbox
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            isLightboxOpen = false;
+            
+            // Khôi phục cuộn trang nền
+            document.body.style.overflow = '';
+            
+            // Xóa sự kiện bàn phím
+            document.removeEventListener('keydown', handleKeydown);
+        }
+
+        // Cập nhật nội dung hiển thị trong Lightbox
+        function updateLightboxContent() {
+            const imgElement = document.getElementById('lightboxImg');
+            if (currentPostImages.length > 0) {
+                imgElement.src = currentPostImages[currentImageIndex].src;
+            }
+            
+            // Ẩn nút Pre/Next nếu chỉ có 1 ảnh
+            const prevBtn = document.querySelector('.lightbox-prev');
+            const nextBtn = document.querySelector('.lightbox-next');
+            if (currentPostImages.length <= 1) {
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+            } else {
+                prevBtn.style.display = 'block';
+                nextBtn.style.display = 'block';
+            }
+        }
+
+        // Chuyển ảnh tiếp theo
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % currentPostImages.length;
+            updateLightboxContent();
+        }
+
+        // Chuyển ảnh trước
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + currentPostImages.length) % currentPostImages.length;
+            updateLightboxContent();
+        }
+
+        // Xử lý điều khiển bằng bàn phím (Mũi tên, ESC)
+        function handleKeydown(e) {
+            if (!isLightboxOpen) return;
+            
+            if (e.key === 'ArrowRight') {
+                nextImage();
+            } else if (e.key === 'ArrowLeft') {
+                prevImage();
+            } else if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        }
+        
+        // Đóng khi Click ra ngoài ảnh (vùng đen mờ)
+        document.getElementById('lightbox').addEventListener('click', function(e) {
+            if (e.target === this) { // Click chính vào phần nền mờ
+                closeLightbox();
+            }
+        });
     </script>
 
 </body>
