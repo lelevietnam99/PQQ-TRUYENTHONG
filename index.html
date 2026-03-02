@@ -26,7 +26,7 @@
         }
         .search-container input {
             width: 100%;
-            padding: 12px 20px 12px 40px; /* Thêm padding trái cho icon */
+            padding: 12px 20px 12px 40px; 
             border: 1px solid #ccc;
             border-radius: 20px;
             font-size: 15px;
@@ -50,27 +50,15 @@
             padding-bottom: 10px;
         }
 
-        /* Phần Header: Avatar, Tên và Ngày tháng */
+        /* Phần Header */
         .post-header {
             display: flex;
             align-items: center;
             padding: 12px 16px;
         }
-        .avatar {
-            width: 40px;
-            height: 40px;
-            background-color: #8b0000;
-            border-radius: 50%;
-            margin-right: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
         .post-info h3 {
             margin: 0;
-            font-size: 15px;
+            font-size: 16px;
             color: #050505;
         }
         .post-date {
@@ -87,26 +75,58 @@
             color: #050505;
             line-height: 1.5;
         }
-        .hashtag {
-            color: #1877f2;
-            font-weight: 500;
-        }
 
-        /* Bố cục Ảnh (Grid) - Hỗ trợ Click */
-        .post-images {
+        /* BỐ CỤC ẢNH GRID TỰ ĐỘNG N+ */
+        .post-images-grid {
             display: grid;
             gap: 2px;
             margin-bottom: 2px;
+            cursor: pointer;
         }
-        .post-images img {
+        .post-images-grid img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            cursor: pointer; /* Biến con trỏ thành bàn tay khi hover */
             transition: opacity 0.2s;
         }
-        .post-images img:hover {
-            opacity: 0.9; /* Hiệu ứng mờ nhẹ khi hover */
+        .post-images-grid img:hover {
+            opacity: 0.9;
+        }
+        
+        /* Layout Thư viện 4+ ảnh (N+) */
+        .grid-library {
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            aspect-ratio: 16 / 9; /* Cố định tỷ lệ khung nhìn cho đẹp */
+        }
+        
+        /* Layout 1-3 ảnh */
+        .grid-1-3 {
+            grid-template-columns: repeat(auto-fit, minmax(30%, 1fr));
+            max-height: 400px;
+        }
+        .grid-1 img {
+            max-height: 500px;
+            object-fit: contain;
+        }
+
+        /* Lớp phủ +N Overlay */
+        .image-overlay {
+            position: relative;
+            overflow: hidden;
+        }
+        .overlay-text {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            font-size: 3rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            pointer-events: none;
         }
 
         /* Phần Video */
@@ -126,88 +146,43 @@
         
         /* CSS CHO LIGHTBOX GALLERY (POP-OUT) */
         .lightbox {
-            display: none; /* Ẩn mặc định */
+            display: none; 
             position: fixed;
-            z-index: 9999; /* Luôn nằm trên cùng */
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9); /* Nền đen mờ 90% */
+            z-index: 9999; 
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.9); 
             justify-content: center;
             align-items: center;
             overflow: hidden;
             flex-direction: column;
         }
+        .lightbox.active { display: flex; }
+        .lightbox-content { max-width: 90%; max-height: 90%; position: relative; }
+        .lightbox-img { max-width: 100%; max-height: 90vh; object-fit: contain; display: block; }
         
-        .lightbox.active {
-            display: flex; /* Hiện khi active */
-        }
-        
-        .lightbox-content {
-            max-width: 90%;
-            max-height: 90%;
-            position: relative;
-        }
-        
-        .lightbox-img {
-            max-width: 100%;
-            max-height: 90vh;
-            object-fit: contain;
-            display: block;
-        }
-        
-        /* Các nút điều hướng */
+        /* Nút điều hướng Lightbox */
         .lightbox-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 3rem;
-            cursor: pointer;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            padding: 20px;
-            opacity: 0.6;
-            transition: opacity 0.3s, background-color 0.3s;
-            border-radius: 50%;
+            background: none; border: none; color: white;
+            font-size: 3rem; cursor: pointer; position: absolute;
+            top: 50%; transform: translateY(-50%); padding: 20px;
+            opacity: 0.6; transition: 0.3s; border-radius: 50%;
         }
-        .lightbox-btn:hover {
-            opacity: 1;
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-        
+        .lightbox-btn:hover { opacity: 1; background-color: rgba(255,255,255,0.1); }
         .lightbox-prev { left: 10px; }
         .lightbox-next { right: 10px; }
-        
-        /* Nút đóng */
         .lightbox-close {
-            position: absolute;
-            top: 15px;
-            right: 25px;
-            color: white;
-            font-size: 2.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            z-index: 10000;
+            position: absolute; top: 15px; right: 25px;
+            color: white; font-size: 2.5rem; font-weight: bold;
+            cursor: pointer; z-index: 10000;
         }
-        .lightbox-close:hover {
-            color: #ccc;
-        }
+        .lightbox-close:hover { color: #ccc; }
 
-        /* Thông báo khi không tìm thấy */
-        #noResultMessage {
-            display: none;
-            color: #65676b;
-            font-size: 15px;
-            text-align: center;
-            margin-top: 10px;
-        }
+        #noResultMessage { display: none; color: #65676b; font-size: 15px; text-align: center; margin-top: 10px; }
         
-        /* Responsive CSS */
         @media (max-width: 600px) {
             .lightbox-btn { font-size: 2rem; padding: 10px; }
             .lightbox-close { font-size: 2rem; }
+            .overlay-text { font-size: 2rem; }
         }
     </style>
 </head>
@@ -217,7 +192,8 @@
         <input type="text" id="searchInput" onkeyup="searchPosts()" placeholder="Tìm kiếm bài viết (ví dụ: tập huấn, thăng đai)...">
         <div id="noResultMessage">Không tìm thấy bài viết nào phù hợp.</div>
     </div>
-<div class="post-container">
+
+    <div class="post-container">
         <div class="post-header">
             <div class="post-info">
                 <h3>💖PQQ Truyền Thông💖</h3>
@@ -240,6 +216,42 @@
             </video>
         </div>
     </div>
+
+    <div class="post-container">
+        <div class="post-header">
+            <div class="post-info">
+                <h3>💖PQQ Truyền Thông💖</h3>
+                <span class="post-date">21/02/2026</span>
+            </div>
+        </div>
+        <div class="post-content">
+            💥 Mùng 5 tết tại Chùa 💥
+        </div>
+
+        <div class="post-images-grid" data-post-id="post_mung5tet">
+            <img src="anhxuan1.jpg" alt="Mùng 5 tết 1">
+            <img src="anhxuan2.jpg" alt="Mùng 5 tết 2">
+            <img src="anhxuan3.jpg" alt="Mùng 5 tết 3">
+            <img src="anhxuan4.jpg" alt="Mùng 5 tết 4">
+            <img src="anhxuan5.jpg" alt="Mùng 5 tết 5">
+            <img src="anhxuan6.jpg" alt="Mùng 5 tết 6">
+            <img src="anhxuan7.jpg" alt="Mùng 5 tết 7">
+            <img src="anhxuan8.jpg" alt="Mùng 5 tết 8">
+            <img src="anhxuan9.jpg" alt="Mùng 5 tết 9">
+            <img src="anhxuan9.jpg" alt="Mùng 5 tết 9">
+            <img src="anhxuan11.jpg" alt="Mùng 5 tết 9">
+            <img src="anhxuan12.jpg" alt="Mùng 5 tết 9">
+            <img src="anhxuan13.jpg" alt="Mùng 5 tết 9">
+            <img src="anhxuan14.jpg" alt="Mùng 5 tết 9">
+            <img src="anhxuan15.jpg" alt="Mùng 5 tết 9">
+            <img src="anhxuan16.jpg" alt="Mùng 5 tết 9">
+            <img src="anhxuan17.jpg" alt="Mùng 5 tết 9">
+            <img src="anhxuan18.jpg" alt="Mùng 5 tết 9">
+            <img src="anhxuan19.jpg" alt="Mùng 5 tết 9">
+            <img src="anhxuan20.jpg" alt="Mùng 5 tết 9">
+        </div>
+    </div>
+
     <div class="post-container">
         <div class="post-header">
             <div class="post-info">
@@ -248,8 +260,7 @@
             </div>
         </div>
         <div class="post-content">
-            Lịch thi thăng đai định kỳ quý I năm nay sẽ được tổ chức vào cuối tháng. Các câu lạc bộ vui lòng chốt danh sách võ sinh tham gia và gửi lại trước ngày 15 nhé. Chúc các võ sinh ôn luyện thật tốt!<br>
-            Dưới đây là video ôn tập và một số ảnh từ kỳ thi trước.
+            💦 KÌ THI THĂNG ĐAI - MÙNG 4 TẾT - BÍNH NGỌ 💖
         </div>
         
         <div class="post-video">
@@ -259,15 +270,13 @@
             </video>
         </div>
 
-        <div class="post-images" style="grid-template-columns: 1fr 1fr;">
-            <img src="anh1.jpg" alt="Thi thăng đai 1" class="gallery-image" data-post="post3" onclick="openLightbox(0, 'post3')">
-            <img src="anh2.jpg" alt="Thi thăng đai 2" class="gallery-image" data-post="post3" onclick="openLightbox(1, 'post3')">
-            <img src="anh3.jpg" alt="Thi thăng đai 3" class="gallery-image" data-post="post3" onclick="openLightbox(2, 'post3')">
-            <img src="anh4.jpg" alt="Thi thăng đai 4" class="gallery-image" data-post="post3" onclick="openLightbox(3, 'post3')">
+        <div class="post-images-grid" data-post-id="post_mung4tet">
+            <img src="anh1.jpg" alt="Thi thăng đai 1">
+            <img src="anh2.jpg" alt="Thi thăng đai 2">
+            <img src="anh3.jpg" alt="Thi thăng đai 3">
+            <img src="anh4.jpg" alt="Thi thăng đai 4">
         </div>
     </div>
-
-    
 
     <div id="lightbox" class="lightbox">
         <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
@@ -279,7 +288,7 @@
     </div>
 
     <script>
-        // 1. CHỨC NĂNG TÌM KIẾM
+        // 1. TÌM KIẾM BÀI VIẾT
         function searchPosts() {
             let input = document.getElementById('searchInput');
             let filter = input.value.toLowerCase();
@@ -298,101 +307,114 @@
                     }
                 }       
             }
-            
             let noResultMsg = document.getElementById('noResultMessage');
-            if (hasResult || filter === "") {
-                noResultMsg.style.display = "none";
-            } else {
-                noResultMsg.style.display = "block";
-            }
+            if (hasResult || filter === "") noResultMsg.style.display = "none";
+            else noResultMsg.style.display = "block";
         }
 
-        // 2. CHỨC NĂNG LIGHTBOX GALLERY (POP-OUT)
+        // 2. TÍNH NĂNG LIGHTBOX BẬT ẢNH
         let currentImageIndex = 0;
-        let currentPostImages = []; // Danh sách ảnh của post đang được xem
-        let currentPostId = ""; // ID của post đang được xem
+        let currentPostImages = [];
         let isLightboxOpen = false;
 
-        // Mở Lightbox
         function openLightbox(index, postId) {
-            currentPostId = postId;
+            currentPostImages = document.querySelectorAll(`[data-post-id="${postId}"] img`);
             currentImageIndex = index;
-            // Thu thập tất cả các ảnh của post cụ thể bằng data-post
-            currentPostImages = document.querySelectorAll(`[data-post="${postId}"]`);
-            
             updateLightboxContent();
             document.getElementById('lightbox').classList.add('active');
             isLightboxOpen = true;
-            
-            // Ngăn cuộn trang nền
             document.body.style.overflow = 'hidden';
-            
-            // Thêm sự kiện bàn phím
             document.addEventListener('keydown', handleKeydown);
         }
 
-        // Đóng Lightbox
         function closeLightbox() {
             document.getElementById('lightbox').classList.remove('active');
             isLightboxOpen = false;
-            
-            // Khôi phục cuộn trang nền
             document.body.style.overflow = '';
-            
-            // Xóa sự kiện bàn phím
             document.removeEventListener('keydown', handleKeydown);
         }
 
-        // Cập nhật nội dung hiển thị trong Lightbox
         function updateLightboxContent() {
             const imgElement = document.getElementById('lightboxImg');
-            if (currentPostImages.length > 0) {
-                imgElement.src = currentPostImages[currentImageIndex].src;
-            }
+            if (currentPostImages.length > 0) imgElement.src = currentPostImages[currentImageIndex].src;
             
-            // Ẩn nút Pre/Next nếu chỉ có 1 ảnh
             const prevBtn = document.querySelector('.lightbox-prev');
             const nextBtn = document.querySelector('.lightbox-next');
             if (currentPostImages.length <= 1) {
-                prevBtn.style.display = 'none';
-                nextBtn.style.display = 'none';
+                prevBtn.style.display = 'none'; nextBtn.style.display = 'none';
             } else {
-                prevBtn.style.display = 'block';
-                nextBtn.style.display = 'block';
+                prevBtn.style.display = 'block'; nextBtn.style.display = 'block';
             }
         }
 
-        // Chuyển ảnh tiếp theo
-        function nextImage() {
-            currentImageIndex = (currentImageIndex + 1) % currentPostImages.length;
-            updateLightboxContent();
-        }
+        function nextImage() { currentImageIndex = (currentImageIndex + 1) % currentPostImages.length; updateLightboxContent(); }
+        function prevImage() { currentImageIndex = (currentImageIndex - 1 + currentPostImages.length) % currentPostImages.length; updateLightboxContent(); }
 
-        // Chuyển ảnh trước
-        function prevImage() {
-            currentImageIndex = (currentImageIndex - 1 + currentPostImages.length) % currentPostImages.length;
-            updateLightboxContent();
-        }
-
-        // Xử lý điều khiển bằng bàn phím (Mũi tên, ESC)
         function handleKeydown(e) {
             if (!isLightboxOpen) return;
-            
-            if (e.key === 'ArrowRight') {
-                nextImage();
-            } else if (e.key === 'ArrowLeft') {
-                prevImage();
-            } else if (e.key === 'Escape') {
-                closeLightbox();
-            }
+            if (e.key === 'ArrowRight') nextImage();
+            else if (e.key === 'ArrowLeft') prevImage();
+            else if (e.key === 'Escape') closeLightbox();
         }
         
-        // Đóng khi Click ra ngoài ảnh (vùng đen mờ)
         document.getElementById('lightbox').addEventListener('click', function(e) {
-            if (e.target === this) { // Click chính vào phần nền mờ
-                closeLightbox();
-            }
+            if (e.target === this) closeLightbox();
         });
+
+        // 3. TỰ ĐỘNG XỬ LÝ BỐ CỤC Grid N+
+        function setupImagesGrid() {
+            const grids = document.querySelectorAll('.post-images-grid');
+
+            grids.forEach(grid => {
+                const images = grid.querySelectorAll('img');
+                const imageCount = images.length;
+                const postId = grid.dataset.postId;
+
+                if (imageCount === 0) return;
+
+                if (imageCount > 4) {
+                    const remainingCount = imageCount - 4;
+                    
+                    for (let i = 0; i < 4; i++) {
+                        const img = images[i];
+                        img.addEventListener('click', () => openLightbox(i, postId));
+                        
+                        if (i === 3) {
+                            const wrapper = document.createElement('div');
+                            wrapper.classList.add('image-overlay');
+                            img.parentNode.insertBefore(wrapper, img);
+                            wrapper.appendChild(img);
+
+                            const textOverlay = document.createElement('div');
+                            textOverlay.classList.add('overlay-text');
+                            textOverlay.innerText = `+${remainingCount}`;
+                            wrapper.appendChild(textOverlay);
+                        }
+                    }
+
+                    for (let i = 4; i < imageCount; i++) {
+                        images[i].style.display = 'none';
+                    }
+                    grid.classList.add('grid-library');
+                
+                } else if (imageCount <= 3) {
+                    grid.classList.add('grid-1-3');
+                    if (imageCount === 1) grid.classList.add('grid-1');
+
+                    images.forEach((img, index) => {
+                        img.addEventListener('click', () => openLightbox(index, postId));
+                    });
+                } else if (imageCount === 4) {
+                    // Nếu đúng 4 ảnh thì chỉ xếp lưới, không tạo overlay +0
+                    grid.classList.add('grid-library');
+                    images.forEach((img, index) => {
+                        img.addEventListener('click', () => openLightbox(index, postId));
+                    });
+                }
+            });
+        }
+
+        window.addEventListener('load', setupImagesGrid);
     </script>
 
 </body>
