@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bản Tin Môn Phái</title>
+    
+    <style>
+        /* CSS Tổng thể nền xám */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Thanh tìm kiếm */
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+        .search-container input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            font-size: 15px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .search-container input:focus {
+            border-color: #8b0000;
+        }
+
+        /* Khung chứa bài viết */
+        .post-container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+
+        /* Phần Header: Avatar, Tên và Ngày tháng */
+        .post-header {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+        }
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #8b0000;
+            border-radius: 50%;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        .post-info h3 {
+            margin: 0;
+            font-size: 15px;
+            color: #050505;
+        }
+        .post-date {
+            font-size: 13px;
+            color: #65676b;
+            display: block;
+            margin-top: 2px;
+        }
+
+        /* Phần Nội dung Text */
+        .post-content {
+            padding: 0 16px 12px 16px;
+            font-size: 15px;
+            color: #050505;
+            line-height: 1.5;
+        }
+
+        /* Bố cục Ảnh */
+        .post-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px;
+            margin-bottom: 2px;
+        }
+        .post-images img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+        }
+
+        /* Phần Video (Đã tối ưu cho cả ngang và dọc) */
+        .post-video {
+            width: 100%;
+            background-color: #000; /* Nền đen lấp đầy khoảng trống cho video dọc */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .post-video video {
+            width: 100%;
+            max-height: 550px; /* Giới hạn chiều cao để video dọc không bị quá dài trên màn hình */
+            object-fit: contain; /* Cực kỳ quan trọng: Giữ nguyên tỷ lệ thật của video */
+            display: block;
+        }
+        
+        /* Thông báo khi không tìm thấy bài viết */
+        #noResultMessage {
+            display: none;
+            color: #65676b;
+            font-size: 15px;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" onkeyup="searchPosts()" placeholder="Tìm kiếm bài viết (ví dụ: tập huấn, thăng đai)...">
+        <div id="noResultMessage">Không tìm thấy bài viết nào phù hợp.</div>
+    </div>
+
+    <div class="post-container">
+        <div class="post-header">
+            <div class="post-info">
+                <h3>💖💖PQQ Truyền Thông</h3>
+                <span class="post-date">02/03/2026</span>
+            </div>
+        </div>
+        <div class="post-content">
+           VÕ ĐƯỜNG TRÍ VŨ THÀNH PHỐ HỒ CHÍ MINH KHU VỰC 3
+TỔ CHỨC KỲ THI THĂNG CẤP ĐẦU XUÂN
+        </div>
+        <div class="post-images">
+            <img src="anh1.jpg" alt="Hình ảnh tập huấn 1">
+            <img src="anh2.jpg" alt="Hình ảnh tập huấn 2">
+            <img src="anh3.jpg" alt="Hình ảnh tập huấn 3">
+            <img src="anh4.jpg" alt="Hình ảnh tập huấn 4">
+        </div>
+        
+    </div>
+
+    <div class="post-container">
+        <div class="post-header">
+            <div class="post-info">
+                <h3>💖💖PQQ Truyền Thông</h3>
+                <span class="post-date">28/02/2026</span>
+            </div>
+        </div>
+        <div class="post-content">
+            Biển rộng dạy tâm ta rộng.<br>
+            Sóng mạnh dạy ta ý chí kiên cường.<br>
+            Gió xuân mát lành nhắc ta sống nhẹ nhàng mà sâu sắc.<br>
+            <br>
+            <span style="color: #1877f2; font-weight: 500;">#phatquangquyen</span> 
+            <span style="color: #1877f2; font-weight: 500;">#vocotruyenvietnam</span>
+        </div>
+        <div class="post-video">
+            <video controls preload="metadata">
+                <source src="video2.mp4" type="video/mp4">
+                Trình duyệt của bạn không hỗ trợ thẻ video.
+            </video>
+        </div>
+    </div>
+
+    <script>
+        function searchPosts() {
+            let input = document.getElementById('searchInput');
+            let filter = input.value.toLowerCase();
+            let posts = document.getElementsByClassName('post-container');
+            let hasResult = false;
+
+            for (let i = 0; i < posts.length; i++) {
+                let content = posts[i].querySelector('.post-content');
+                if (content) {
+                    let textValue = content.textContent || content.innerText;
+                    if (textValue.toLowerCase().indexOf(filter) > -1) {
+                        posts[i].style.display = ""; 
+                        hasResult = true;
+                    } else {
+                        posts[i].style.display = "none"; 
+                    }
+                }       
+            }
+            
+            let noResultMsg = document.getElementById('noResultMessage');
+            if (hasResult || filter === "") {
+                noResultMsg.style.display = "none";
+            } else {
+                noResultMsg.style.display = "block";
+            }
+        }
+    </script>
+
+</body>
+</html>
